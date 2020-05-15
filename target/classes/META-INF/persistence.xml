@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.2"
+	xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd">
+	<persistence-unit name="backendPSU"
+		transaction-type="RESOURCE_LOCAL">
+		<non-jta-data-source>java:/jboss/backendDS</non-jta-data-source>
+		<class>com.todo.todo.entidades.Actividade</class>
+		<class>com.todo.todo.entidades.EstadosActividad</class>
+		<class>com.todo.todo.entidades.Usuario</class>
+		<class>com.todo.todo.entidades.Tablero</class>
+
+		<properties>
+			<property name="hibernate.transaction.jta.platform"
+				value="org.hibernate.service.jta.platform.internal.JBossAppServerJtaPlatform" />
+			<property name="hibernate.dialect"
+				value="org.hibernate.dialect.PostgreSQLDialect" />
+		</properties>
+	</persistence-unit>
+</persistence>
