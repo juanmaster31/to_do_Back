@@ -2,6 +2,9 @@ package com.todo.todo.entidades;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import at.favre.lib.crypto.bcrypt.BCrypt;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -14,7 +17,8 @@ import java.util.UUID;
 @Table(name="usuarios")
 @NamedQueries({ 
 @NamedQuery(name = "Usuarios.findAll", query = "SELECT u FROM Usuario u"),
-@NamedQuery(name = "Usuarios.byLoginUsuario", query = "SELECT u FROM Usuario u where u.loginUsuario = :username"), 
+@NamedQuery(name = "Usuarios.byLoginUsuario", query = "SELECT u FROM Usuario u where u.loginUsuario = :username and u.estado = true"), 
+@NamedQuery(name = "Usuarios.usuarioByLoginEmail", query = "SELECT u FROM Usuario u where u.loginUsuario = :loginusuario or u.email = :email"),
 })
 public class Usuario implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -89,7 +93,13 @@ public class Usuario implements Serializable {
 	}
 
 	public void setPassword(String password) {
-		this.password = password;
+		String bcryptHashString = BCrypt.withDefaults().hashToString(12, password.toCharArray());
+		this.password = bcryptHashString;
+	}
+	
+	public boolean validarPassword(String password) {
+		BCrypt.Result result = BCrypt.verifyer().verify(password.toCharArray(), this.password);
+		return result.verified;
 	}
 
 }
